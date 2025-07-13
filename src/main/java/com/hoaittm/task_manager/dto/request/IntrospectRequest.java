@@ -1,4 +1,4 @@
-package com.hoaittm.task_manager.dto.response;
+package com.hoaittm.task_manager.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthResponse {
+public class IntrospectRequest {
     private String token;
-    private boolean authenticated;
 }
