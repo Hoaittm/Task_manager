@@ -3,6 +3,7 @@ package com.hoaittm.task_manager.controller;
 import com.hoaittm.task_manager.dto.request.UserCreateRequest;
 import com.hoaittm.task_manager.dto.request.UserUpdateRequest;
 import com.hoaittm.task_manager.dto.response.ApiResponse;
+import com.hoaittm.task_manager.dto.response.UserResponse;
 import com.hoaittm.task_manager.entity.User;
 import com.hoaittm.task_manager.service.UserService;
 import jakarta.validation.Valid;
@@ -30,11 +31,11 @@ public class UserController {
     }
 
     @GetMapping("{userId}")
-    User getUserById (@PathVariable("userId") String userId){
+    UserResponse getUserById (@PathVariable("userId") String userId){
         return userService.getUserById(userId);
     }
     @PutMapping("{userId}")
-    User updateUser (@PathVariable("userId") String userId , @RequestBody UserUpdateRequest request){
+    UserResponse updateUser (@PathVariable("userId") String userId , @RequestBody UserUpdateRequest request){
         return userService.updateUser(userId,request);
     }
     @DeleteMapping ("{userId}")
