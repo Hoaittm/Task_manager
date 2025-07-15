@@ -4,6 +4,7 @@ import com.hoaittm.task_manager.dto.request.UserCreateRequest;
 import com.hoaittm.task_manager.dto.request.UserUpdateRequest;
 import com.hoaittm.task_manager.dto.response.UserResponse;
 import com.hoaittm.task_manager.entity.User;
+import com.hoaittm.task_manager.enums.Role;
 import com.hoaittm.task_manager.exception.AppException;
 import com.hoaittm.task_manager.exception.ErrorCode;
 import com.hoaittm.task_manager.mapper.UserMapper;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -33,6 +35,10 @@ public class UserService {
         User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 
