@@ -1,5 +1,6 @@
 package com.hoaittm.task_manager.dto.response;
 
+import com.hoaittm.task_manager.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,5 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private LocalDate dob;
-    private Set<String> roles;
+    private Set<RoleResponse> roles;
 }

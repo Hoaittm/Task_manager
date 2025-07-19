@@ -3,6 +3,7 @@ package com.hoaittm.task_manager.dto.request;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 @Data
 public class UserUpdateRequest {
@@ -11,5 +12,6 @@ public class UserUpdateRequest {
     private String firstName;
     private String lastName;
     private LocalDate dob;
-    private Set<String> role;
+    private List<String> roles  ;
+
 }

@@ -1,5 +1,6 @@
 package com.hoaittm.task_manager.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,44 +23,42 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {"/users","/auth/token","/auth/introspect"};
-    @Value("${jwt.signerKey}")
-    private String signerKey;
+    private final String[] PUBLIC_ENDPOINTS = {"/users","/auth/token","/auth/introspect","/auth/logout","/auth/refresh"};
+
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
 
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET,"/users").hasAuthority("SCOPE_ADMIN")
+
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder())));
+                        jwtConfigurer.decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                ));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }
-//    private JwtAuthenticationConverter jwtAuthenticationConverter() {
-//        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-//        converter.setAuthorityPrefix("ROLE_"); // mặc định là "SCOPE_"
-//        converter.setAuthoritiesClaimName("scope"); // hoặc "scp" tùy vào JWT của bạn
-//
-//        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-//        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
-//        return jwtConverter;
-//    }
-    @Bean
-  JwtDecoder jwtDecoder(){
-       SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS256");
-       return NimbusJwtDecoder
-               .withSecretKey(secretKeySpec)
-               .macAlgorithm(MacAlgorithm.HS256)
-               .build();
-    };
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+        converter.setAuthorityPrefix(""); // mặc định là "SCOPE_"
+        converter.setAuthoritiesClaimName("scope"); // hoặc "scp" tùy vào JWT của bạn
+
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtConverter;
+    }
+
+
     @Bean
     PasswordEncoder passwordEncoder (){
        return new BCryptPasswordEncoder(10);

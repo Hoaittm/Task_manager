@@ -2,6 +2,8 @@ package com.hoaittm.task_manager.controller;
 
 import com.hoaittm.task_manager.dto.request.AuthRequest;
 import com.hoaittm.task_manager.dto.request.IntrospectRequest;
+import com.hoaittm.task_manager.dto.request.LogoutRequest;
+import com.hoaittm.task_manager.dto.request.RefeshRequest;
 import com.hoaittm.task_manager.dto.response.ApiResponse;
 import com.hoaittm.task_manager.dto.response.AuthResponse;
 import com.hoaittm.task_manager.dto.response.IntrospectResponse;
@@ -31,11 +33,26 @@ public class AuthController {
                 .result(result)
                 .build()   ;
     }
+    @PostMapping("/refresh")
+    ApiResponse<AuthResponse> refeshToken(@RequestBody RefeshRequest request)
+            throws JOSEException, ParseException {
+        var result = authService.refreshToken(request);
+        return ApiResponse.<AuthResponse>builder()
+                .result(result)
+                .build()   ;
+    }
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
             var result = authService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build()   ;
+    }
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
+          authService.logout(request);
+        return ApiResponse.<Void>builder()
+
                 .build()   ;
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping
-    List <User> getUsers(){
+    List <UserResponse> getUsers(){
        var authentication =  SecurityContextHolder.getContext().getAuthentication();
 
        log.info("Username: {}",authentication.getName());
@@ -41,6 +41,10 @@ public class UserController {
     @GetMapping("{userId}")
     UserResponse getUserById (@PathVariable("userId") String userId){
         return userService.getUserById(userId);
+    }
+    @GetMapping("/myinfo")
+    UserResponse getMyInfo (){
+        return userService.getMyInfo();
     }
     @PutMapping("{userId}")
     UserResponse updateUser (@PathVariable("userId") String userId , @RequestBody UserUpdateRequest request){
