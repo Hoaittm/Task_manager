@@ -23,8 +23,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -160,6 +163,7 @@ public class AuthService {
                 ))
 
                 .jwtID(UUID.randomUUID().toString())
+                .claim("id",user.getId())
                 .claim("scope",buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -186,4 +190,12 @@ public class AuthService {
 
         return stringJoiner.toString();
     }
+
+//    public String getCurrentUserIdFromToken() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Jwt jwt = (Jwt) authentication.getPrincipal();
+//        String id= jwt.getId();
+//        return id;
+//    }
+
 }

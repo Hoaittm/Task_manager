@@ -1,25 +1,23 @@
-package com.hoaittm.task_manager.entity;
+package com.hoaittm.task_manager.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Entity
-@Table (name = "tasks")
 @Data
-public class Task {
-    @Id
-    @GeneratedValue (strategy = GenerationType.UUID)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class TaskResponse {
     private String id;
     private String title;
     private String description;
-
     private LocalDate due_date;
     private boolean complete;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String user_id;
 }
