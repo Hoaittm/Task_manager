@@ -44,6 +44,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                         .requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer

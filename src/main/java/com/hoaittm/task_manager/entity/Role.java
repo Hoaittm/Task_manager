@@ -14,7 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Table(name = "roles")
 public class Role {
     @Id
     private String name;
